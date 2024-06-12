@@ -3,17 +3,17 @@ GTFL - A Graphical Terminal For Lisp
 
 ### Abstract
 
-GTFL is a graphical terminal for Common Lisp. The client is a html page running in a web browser and GTFL provides mechanisms for sending content to the client page from within Lisp (using [HUNCHENTOOT](http://www.weitz.de/hunchentoot/) and [HT-SIMPLE-AJAX](http://martin-loetzsch.de/ht-simple-ajax)).
+GTFL is a graphical terminal for Common Lisp. The client is a html page running in a web browser and GTFL provides mechanisms for sending content to the client page from within Lisp (using [HUNCHENTOOT](http://www.weitz.de/hunchentoot/) (redirects to https://edicl.github.io/hunchentoot/) and [HT-SIMPLE-AJAX](https://martin-loetzsch.de/ht-simple-ajax)).
 
 It is meant for Lisp programmers who want to debug or visualize their own algorithms. Instead of printing tracing information to the Lisp listener (which everybody normally does to understand what's going on), more readable graphical representations of the algorithm's internals are sent to the GTFL client page.
 
 GTFL also comes with mechanisms for visualizing complex (hierarchical) data or control structures. It provides functions for drawing trees and for hiding complexity in elements that expand when the user clicks on them.
 
-Two real-life examples for an application of GTFL can be found [here](https://www.martin-loetzsch.de/gtfl/application-example-1) (or [html/application-example-1.html](https://html-preview.github.io/?url=https://github.com/fovi-llc/gtfl/blob/main/html/application-example-1.html)) and [here](https://www.martin-loetzsch.de/gtfl/application-example-2) (or [html/application-example-1.html](https://html-preview.github.io/?url=https://github.com/fovi-llc/gtfl/blob/main/html/application-example-2.html)). These are debug traces of linguistic parsing and production in the [Fluid Construction Grammar](http://fcg-net.org) (FCG) framework. Such traces help the developers FCG to understand and debug their programs and they help users of FCG to see what their linguistic rules are doing. By encapsulating visualizations for representations in expandable html elements, the complete trace fits into one browser window and still includes every little detail and intermediate processing step of the involved FCG algorithms (which would be thousands of pages debugging output to the listener).
+Two real-life examples for an application of GTFL can be found [here](https://www.martin-loetzsch.de/gtfl/application-example-1) (or [html/application-example-1.html](https://html-preview.github.io/?url=https://github.com/fovi-llc/gtfl/blob/main/html/application-example-1.html)) and [here](https://www.martin-loetzsch.de/gtfl/application-example-2) (or [html/application-example-2.html](https://html-preview.github.io/?url=https://github.com/fovi-llc/gtfl/blob/main/html/application-example-2.html)). These are debug traces of linguistic parsing and production in the [Fluid Construction Grammar](http://fcg-net.org) (FCG) framework. Such traces help the developers FCG to understand and debug their programs and they help users of FCG to see what their linguistic rules are doing. By encapsulating visualizations for representations in expandable html elements, the complete trace fits into one browser window and still includes every little detail and intermediate processing step of the involved FCG algorithms (which would be thousands of pages debugging output to the listener).
 
 #### GitHub Copy
 
-[jimwhite@](https://github.com/jimwhite) copied the archive http://martin-loetzsch.de/gtfl/gtfl.tar.gz with version 0.1.3 on June 11, 2024 to https://github.com/fovi-llc/gtfl.  This README is an incomplete conversion of the [index.html](https://html-preview.github.io/?url=https://github.com/fovi-llc/gtfl/blob/main/index.html) file which has all the details formatted by GTFL itself.
+[jimwhite@](https://github.com/jimwhite) copied the archive https://martin-loetzsch.de/gtfl/gtfl.tar.gz with version 0.1.3 on June 11, 2024 from the homepage https://www.martin-loetzsch.de/gtfl/ to https://github.com/fovi-llc/gtfl.  This README is an incomplete conversion of the [index.html](https://html-preview.github.io/?url=https://github.com/fovi-llc/gtfl/blob/main/index.html) file which has all the details formatted by GTFL itself.  I've updated (most of) the HTTP URLs to HTTPS.
 
 ### Contents
 
@@ -47,11 +47,11 @@ Two real-life examples for an application of GTFL can be found [here](https://ww
 
 ### Download and installation
 
-GTFL together with examples and this documentation can be downloaded from [http://martin-loetzsch.de/gtfl/gtfl.tar.gz](http://martin-loetzsch.de/gtfl/gtfl.tar.gz). The current version is 0.1.3.
+GTFL together with examples and this documentation can be downloaded from [https://martin-loetzsch.de/gtfl/gtfl.tar.gz](https://martin-loetzsch.de/gtfl/gtfl.tar.gz). The current version is 0.1.3.
 
-GTFL directly relies on [CL-WHO](http://www.weitz.de/cl-who/) for html generation, [HUNCHENTOOT](http://www.weitz.de/hunchentoot/) (version >= 1.1.0) for running the web server and [HT-SIMPLE-AJAX](http://martin-loetzsch.de/ht-simple-ajax) for the asynchrounous client/server communication. And these libraries themselves require quite a number of other libraries (see the dependency graph [above](#asdf-dependencies)). Make sure you have recent versions of everything.
+GTFL directly relies on [CL-WHO](https://www.weitz.de/cl-who/) for html generation, [HUNCHENTOOT](https://www.weitz.de/hunchentoot/) (version >= 1.1.0) for running the web server and [HT-SIMPLE-AJAX](https://martin-loetzsch.de/ht-simple-ajax) for the asynchrounous client/server communication. And these libraries themselves require quite a number of other libraries (see the dependency graph [above](#asdf-dependencies)). Make sure you have recent versions of everything.
 
-If you don't want to download all these libraries manually, you can use [Quicklisp](http://www.quicklisp.org/) or [ASDF-INSTALL](http://www.cliki.net/ASDF-Install):
+If you don't want to download all these libraries manually, you can use [Quicklisp](https://www.quicklisp.org/) or [ASDF-INSTALL](https://www.cliki.net/ASDF-Install):
 
 (ql:quickload "gtfl")
 
@@ -66,7 +66,7 @@ Once everything is installed, GTFL is compiled and loaded with:
 As of 2012, all contemporary web browsers except Internet Explorer work well with gtfl.
 
 The output of GTFL is XHTML 1.0 Strict and CSS level 2.1 conform as can be checked below (this page is a document created with GTFL):  
-   [![Valid XHTML 1.0 Strict](valid-xhtml10.png)](http://validator.w3.org/check?uri=http://martin-loetzsch.de/gtfl/)   [![Valid CSS level 2.1](valid-css21.gif)](http://jigsaw.w3.org/css-validator/validator?uri=http://martin-loetzsch.de/gtfl/)
+   [![Valid XHTML 1.0 Strict](valid-xhtml10.png)](https://validator.w3.org/check?uri=https://martin-loetzsch.de/gtfl/)   [![Valid CSS level 2.1](valid-css21.gif)](https://jigsaw.w3.org/css-validator/validator?uri=https://martin-loetzsch.de/gtfl/)
 
 ### The GTFL terminal
 
@@ -87,7 +87,7 @@ Now you can push any content there, for example
 hello world
 ===========
 
-GTFL uses [CL-WHO](http://www.weitz.de/cl-who/) for rendering s-expressions into XHTML. If you are not familiar with CL-WHO then read its documentation first.
+GTFL uses [CL-WHO](https://www.weitz.de/cl-who/) for rendering s-expressions into XHTML. If you are not familiar with CL-WHO then read its documentation first.
 
 More examples:
 
@@ -485,10 +485,10 @@ _thing_ is the thing to display. _max-width_limits the width of the result (in c
 
 ### Acknowledgements
 
-GTFL was initially developed as part of the Babel2 framework ([http://emergent-languages.org/](http://emergent-languages.org/)).
+GTFL was initially developed as part of the Babel2 framework ([https://emergent-languages.org/](https://emergent-languages.org/)).
 
-[Joris Bleys](http://arti.vub.ac.be/~jorisb/) and [Pieter Wellens](http://arti.vub.ac.be/~pieter/) have helped a lot in improving the system by finding bugs and suggesting many of its current features.
+[Joris Bleys](https://arti.vub.ac.be/~jorisb/) and [Pieter Wellens](https://arti.vub.ac.be/~pieter/) have helped a lot in improving the system by finding bugs and suggesting many of its current features.
 
-This page was created with GTFL itself (see [examples/index-html.lisp](examples/index-html.lisp)). The layout and structure is heavily inspired by (or directly copied from) [DOCUMENTATION-TEMPLATE](http://weitz.de/documentation-template/).
+This page was created with GTFL itself (see [examples/index-html.lisp](examples/index-html.lisp)). The layout and structure is heavily inspired by (or directly copied from) [DOCUMENTATION-TEMPLATE](http://weitz.de/documentation-template/) (redirects to https://edicl.github.io/documentation-template/).
 
-Last change: 2012/01/25 15:05:34 by [Martin Loetzsch](http://martin-loetzsch.de/)
+Last change: 2012/01/25 15:05:34 by [Martin Loetzsch](https://martin-loetzsch.de/)
