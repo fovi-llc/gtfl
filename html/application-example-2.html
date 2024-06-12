@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Interactive Visualizations II</title><script src="AsyncXMLHttpRequest.js"></script><script type="text/javascript">
+//<![CDATA[
+
+function staticExpand(id, expanded) {
+  xhr = new AsyncXMLHttpRequest();
+  xhr.id = id
+  xhr.onfinish = function(xhr) { 
+    var node = document.getElementById(xhr.id);
+    while (node.firstChild) { node.removeChild(node.firstChild); }
+    node.appendChild (document.importNode(xhr.responseXML.firstChild,true));
+  }
+  xhr.open('GET', id + '-' + (expanded ? 'expanded' : 'collapsed') + '.xml'); 
+  xhr.send(null);
+}
+
+function expand(id) {
+  staticExpand(id, true);
+}
+
+function collapse(id) {
+  staticExpand(id, false);
+}
+
+function expandAll(id) {
+  var nodes = document.getElementsByName(id);
+  for (i=0;i<nodes.length;i++) {
+    expand(nodes[i].getAttribute('id'));
+  }
+}
+
+function collapseAll(id) {
+  var nodes = document.getElementsByName(id);
+  for (i=0;i<nodes.length;i++) {
+    collapse(nodes[i].getAttribute('id'));
+  }
+}
+
+function highlightSymbol(symbolName, elementId, backgroundColor) {
+  var nodes = document.getElementsByName(symbolName);
+  var highlight = (document.getElementById(elementId).style.backgroundColor == '');
+  for (i=0;i<nodes.length;i++) {
+    if (highlight) {
+      nodes[i].parentNode.style.backgroundColor = backgroundColor;
+      nodes[i].style.color = 'black';
+    } else {
+      nodes[i].parentNode.style.backgroundColor = '';
+      nodes[i].style.color = '';
+    }
+  }
+}
+
+//]]></script><style type="text/css">
+div.task-result-collection { margin-bottom: 10px; }
+.task-result-collection div.task-node { padding-0px; margin-bottom:4px;margin-top:4px; }
+.task-result-collection div.title { padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; background-color:#000; }
+.task-result-collection div.title a { color:#fff; }
+.task-result-collection div.task-processor { border:1px dotted #000; }
+.task-result-collection div.task-result { border:1px solid #000; }
+
+div.unit { border:1px solid #888; margin-bottom:6px; margin-top:6px; }
+div.unit-name { padding-top:2px; padding-bottom:2px; padding-left:5px; padding-right:5px; color:#009; }
+div.unit-feature { padding-left:5px; padding-right:2px;padding-top:3px;padding-bottom:3px;border-top: 1px dashed #bbb;background-color:#fff;}
+div.unit-feature-name { float:left;color:#060;white-space:nowrap;line-height:13px; margin-bottom:1px;}
+div.unit-feature-name span.tagged { color:#700; } 
+div.unit-feature-value { display:inline-block; }
+
+div.rule { padding:0px; border:1px solid #008; display:inline-block; margin-right: 7px; margin-bottom:3px;margin-top:3px; }
+div.rule > div.title { background-color: #008;color:#fff;padding-left:2px;padding-right:2px;padding-top:0px;padding-bottom:1px; }
+div.rule > div.title > a { color:#fff; font-size:9pt; font-weight:normal;}
+div.rule > table > tbody > tr > td.attributes { padding:4px; border-bottom:1px dashed #008;}
+div.rule table.rule { border-collapse:collapse;margin-top:4px;margin-bottom:-2px; }
+div.rule table.rule > tbody > tr > td { padding:0px; }
+div.rule table.rule > tbody > tr:first-child > td { padding-top:3px;padding-bottom:2px;} 
+div.rule table.rule > tbody > tr.j-units > td { border-top:1px dashed #008; padding-top:3px;padding-bottom:2px;}
+div.rule table.rule > tbody > tr > td:first-child { padding-left:7px;}
+div.rule table.rule > tbody > tr > td:last-child { padding-right:7px;}
+div.rule table.rule > tbody > tr > td:first-child > div { float:right; }
+div.rule table.rule > tbody > tr > td:first-child > table > tbody > tr > td { padding:0px; }
+div.rule table.rule > tbody > tr > td:first-child > table > tbody > tr > td > div { float:right; }
+
+div.dynamic-physical-robot-world { display:inline-block;position:relative;overflow:hidden;}
+div.rscan { margin-bottom:7px; margin-top:7px; }
+div.rscan-float { display:inline-block;margin-right:10px;
+                  margin-top:-6px;margin-bottom:8px; }
+div.rscan-title { padding-top:2px; padding-left:5px;padding-right:5px;padding-bottom:2px;  }
+div.rscan-title a, div.rscan-title { color:#fff; }
+div.rscan > table { border-collapse:collapse; }
+div.rscan > table > tbody > tr > td { padding-top:3px; padding-left:5px;padding-right:5px;padding-bottom:3px; vertical-align:top; }
+div.rscan > table > tbody > tr > td > table { margin-bottom:-3px;}
+
+span.rsc > ul > li { font-weight:normal;font-size:9pt;}
+
+div.pprint { margin-top:2px;}
+div.pprint * { font-family:Courier;font-weight:normal;font-size:9pt;line-height:10px;display:inline-block; }
+div.pprint span.table { display:inline-table;border-collapse:collapse;}
+div.pprint span.table > span { display:table-cell;vertical-align:top; }
+
+div.cer { border:1px solid #465; display:inline-block; margin-right:7px; margin-bottom:7px;}
+div.cer .cer-title { background-color:#465;padding:1px;
+                     padding-left:3px;padding-right:3px; }
+div.cer .cer-title > a { color:white; }
+div.cer table.cer-details  { margin:3px;margin-bottom:-5px;}
+div.cer table.cer-details img { margin:-15px;margin-top:0px;margin-right:0px; }
+
+div.physical-robot-scene { display:inline-block;position:relative;overflow:hidden;}
+div.rule-collection { padding:0px; display:inline-block; margin:3px; }
+div.rule-collection > div.title a { color:#40241A; }
+div.rule-collection-expanded { border:1px solid #40241A; }
+div.rule-collection-expanded > div.title { padding-left:5px;padding-right:5px;padding-top:1px;padding-bottom:2px; }
+div.rule-collection > table > tbody > tr { border-top:1px dashed #40241A;}
+div.rule-collection > table > tbody > tr > td { padding-left:5px; padding-bottom:2px;padding-top:2px;}
+
+div.ipen { margin-top:5px;margin-bottom:5px; }
+div.ipen .ipen-title { color:white; position:relative;padding:3px;
+                       padding-bottom:2px;padding-top:2px;}
+div.ipen div.ipen-details { padding:3px; }
+div.ipen > div > div.ipen-details:last-child { margin-bottom:-15px; }
+
+div.chnk { border:1px solid #543; display:inline-block; margin-right:5px; margin-bottom:5px;}
+div.chnk-title { position:relative;background-color:#543;padding:1px;
+                 padding-left:3px;padding-right:3px; }
+div.chnk-title > a { color:white; }
+div.chnk-title > div.save-button { position:absolute;right:5px;top:1px;display:none;}
+div.chnk-title > div.save-button > a { color:#fff; }
+div.chnk table.chnk-details { margin:3px;margin-bottom:-5px;}
+div.chnk .chnk-details img { margin:-15px;margin-top:0px;margin-right:0px; }
+
+table.tree { border-collapse:collapse }
+table.tree > tbody > tr > td { padding:0px;vertical-align:middle; }
+table.tree div.child { position:relative; }
+table.tree div.vl-top { height:50%;position:absolute;bottom:0px; }
+table.tree div.vl-middle { height:100%;position:absolute;top:0px; }
+table.tree div.vl-bottom { height:50%;position:absolute;top:0px; }
+table.tree div.vl-left { left:0px; }
+table.tree div.vl-right { right:0px; }
+
+table.cfs { border-collapse:collapse; margin-left:3px; margin-right:2px; margin-top:2px; margin-bottom:5px; }
+table.cfs > tbody > tr > td { padding:0px; } 
+
+div.dynamic-physical-robot-scene { display:inline-block;position:relative;overflow:hidden;}
+div.rsc { padding:0px; display:inline-block; margin:3px; }
+div.rsc > div.title a { color:#40241A; }
+div.rsc-expanded > div.title { background-color:#40241A; }
+div.rsc-expanded > div.title a { color:#fff; }
+div.rsc-expanded { border:1px solid #40241A; }
+div.rsc-expanded > div.title { padding-left:5px;padding-right5:px;padding-top:1px;padding-bottom:2px; }
+div.rsc > table > tbody > tr { border-top:1px solid #40241A;}
+div.rsc > table > tbody > tr:first-child { border:none;}
+div.rsc > table > tbody > tr > td { padding-left:5px; padding-bottom:2px;padding-top:2px;}
+
+div.physical-robot-world-model {position:relative;overflow:hidden;margin-left:auto;margin-right:auto;}
+div.physical-robot-world-model > div.entity-label { 
+   position:absolute; margin-top:-7px; margin-left:8px;margin-right:8px;
+   padding:0px; background-color:#fff;display:inline;
+   filter:alpha(opacity=70); -moz-opacity:.70; opacity:.70; }
+div.physical-robot-world-model > div.wm-title {
+position:absolute; padding:10px; background-color:#fff;top:10px;right:10px;  
+filter:alpha(opacity=70); -moz-opacity:.70; opacity:.70; }
+
+body.ira { padding:0px;margin:0px;}
+body.ira form { margin:0px;}
+div.ira-title { padding-left:5px;padding-right:5px;padding-top:3px;padding-bottom:3px;background-color:#333;color:#fff;position:relative;}
+div.ira-title > div.ira-left { float:left; }
+div.ira-title > div.ira-right { position:absolute;right:0px;bottom:1px;padding-right:6px; }
+div.ira-title a { color:#fff;}
+div.ira-content { max-width:100%;overflow:auto;padding-top:8px;padding-bottom:8px; }
+div.ira-content > * { margin-left:6px;margin-right:6px; }
+div.ira-menu { max-width:100%;overflow:hidden;padding-left:6px;padding-right:0px;padding-top:2px;padding-bottom:2px;border-bottom:1px dotted #333;}
+div.ira-menu > span { font-size:8pt; white-space:nowrap; padding-right:20px;}
+
+div.entity { display:inline-block;margin-right:10px;margin-top:4px;
+             margin-bottom:4px;padding:0px; }
+div.entity-box { border:1px solid #562; display:inline-block;}
+div.entity div.entity-title  { 
+  padding:0px;padding-left:3px;padding-right:3px;
+  white-space:nowrap; background-color:#562; }
+div.entity div.entity-title > a {color:#fff;}
+div.entity div.entity-title > span {color:#fff;}
+table.entity { border-collapse:collapse; }
+table.entity td.entity-type { font-style:italic;padding:0px;padding-left:4px;}
+table.entity td.entity-details div.entity-detail { 
+  padding-left:4px; padding-right:4px;padding-bottom:1px;padding-top:1px;
+  border-top:1px dashed #563;text-align:left;  }
+table.entity td.entity-details > div { overflow:hidden; }
+table.entity td.entity-details div.entity-detail:first-child { border-top:none;} 
+
+div.dynamic-physical-robot-world-model {position:relative;overflow:hidden;margin-left:auto;margin-right:auto;}
+div.dynamic-physical-robot-world-model > div.entity-label { 
+   position:absolute; margin-top:-7px; margin-left:8px;margin-right:8px;
+   padding:0px; background-color:#fff;display:inline;
+   filter:alpha(opacity=70); -moz-opacity:.70; opacity:.70; }
+div.dynamic-physical-robot-world-model > div.wm-title {
+position:absolute; padding:10px; background-color:#fff;top:10px;right:10px;  
+filter:alpha(opacity=70); -moz-opacity:.70; opacity:.70; }
+
+div.binding { display:inline-block;margin-right:20px;
+               margin-bottom:15px; border-collapse:collapse; }
+div.binding > div.pprint { margin-left:3px;}
+div.binding > table { border-collapse:collapse; }
+div.binding > table > tbody > tr > td > div.entity { 
+    margin-top:3px;margin-bottom:1px;}
+div.binding div.unbound-value {
+    color:#562;padding:0px;padding-right:3px;padding-left:3px;
+    margin-top:3px;margin-bottom:1px;border:1px dotted #562; }
+div.binding td.score { padding-left:4px; }
+
+body { margin:30px;}
+
+div.task { padding:0px; }
+.task div.task-title { padding:5px;}
+.task div.process-result { border-top: 1px dashed #ccc;}
+.task div.process-result > div { padding: 5px; }
+.task .process-result td.data-field { padding:0px;padding-right:10px;vertical-align:top; }
+.task .process-result td.data { padding:0px;vertical-align:top; }
+
+p.trace-search { clear:both; }
+hr.trace-search { clear:both;}
+p.trace-search > div:first-child { float:left;padding:7px;padding-left:0px;}
+
+div.ccn { margin-top:5px;margin-bottom:5px; }
+div.ccn-light { margin-top:5px;margin-bottom:5px;padding-left:1px;
+                font-style:italic; }
+div.ccn-float { display:inline-block;margin-right:10px;
+                margin-top:-6px;margin-bottom:8px; }
+div.ccn .ccn-title { color:white; position:relative; }
+div.ccn .ccn-title > a { color:white; }
+div.ccn .ccn-title > div.save-button { 
+   position:absolute;right:5px;top:1px;display:none;}
+div.ccn .ccn-title > div.save-button > a { color:#fff; }
+div.ccn .ccn-title { padding:1px;padding-left:3px;padding-right:3px;}
+div.ccn .ccn-details { padding:2px; }
+div.ccn .ccn-details > table.two-col { margin-bottom:-5px;}
+div.ccn-dead-node { padding-left:2px;
+                    padding-right:1px;padding-bottom:1px;}
+
+div.j-unit { padding:0px; margin-bottom:6px; margin-top:6px; }
+div.j-unit div.existing { border:1px dotted #888; background-color:#ddd;}
+div.j-unit div.new { border:1px solid #888;}
+div.j-unit div.unit-name { padding-top:2px; padding-bottom:2px; padding-left:5px; padding-right:5px; color:#444; }
+div.j-unit div.tag-ref { padding-left:5px; padding-right:2px;padding-top:3px;padding-bottom:3px;border-top: 1px dashed #bbb;color:#700;white-space:nowrap;}
+
+div.menu { 
+  display:none;position:absolute;
+  background-color:#fff;padding-right:3px;padding-left:3px;font-weight:normal;
+  filter:alpha(opacity=85);-moz-opacity:0.85;-khtml-opacity: 0.85;opacity: 0.85;
+}
+div.normal-size-menu { height:16px;top:-17px;left:-1px;font-size:11px; }
+div.big-size-menu { height:22px;top:-23px;left:-1px;font-size:18px; }
+div.menu a { margin-right:2px;}
+
+table.rar { border-collapse:collapse; }
+table.rar > tbody > tr > td { vertical-align:top;padding-bottom:10px; }
+table.rar > tbody > tr > td:first-child { padding-right:15px; }
+ 
+table.two-col { border-collapse:collapse; }
+table.two-col > tbody > tr > td { padding-bottom:6px; vertical-align:top; }
+table.two-col > tbody > tr > td:first-child { padding-right:10px; }
+table.two-col > tbody > tr > td  h3 { margin-top:0px;}
+
+div.physical-robot-world { display:inline-block;position:relative;overflow:hidden;}
+span.rcc > ul > li { font-weight:normal;font-size:9pt;}
+
+div.predicate-network-svg { overflow:hidden;}
+div.predicate-network-svg > svg { margin-left:-8px;margin-right:-8px;margin-top:-3px;margin-bottom:-8px; }
+
+body, td { font-size: 9pt; font-family: Helvetica Neue, Helvetica, Arial; }
+a { color: #000066; text-decoration:none; }
+a:hover {text-decoration: underline}
+a.button { font-size: 8pt;}
+hr { border:0px;color:#777;background-color:#777;height:1px;width:100%;}
+
+div.spatial-scene { display:inline-block;position:relative;overflow:hidden; }
+div.spatial-scene > div.entity-label { 
+   position:absolute; margin-top:-7px; margin-left:8px;margin-right:8px;
+   padding:0px; background-color:#fff;  
+   filter:alpha(opacity=70); -moz-opacity:.70; opacity:.70; }
+
+div.rcan { margin-bottom:5px; margin-top:5px; }
+div.rcan-float { display:inline-block;margin-right:10px;
+                margin-top:-6px;margin-bottom:8px; }
+div.rcan-title { padding-top:2px; padding-left:5px;padding-right:5px;padding-bottom:2px;  }
+div.rcan-title { position:relative; color:#fff; }
+div.rcan-title > a { color:#fff; }
+div.rcan-title > div.save-button { position:absolute;right:5px;top:2px; display:none; }
+div.rcan-title > div.save-button > a { color:#fff; }
+div.rcan > div > table { border-collapse:collapse; }
+div.rcan > div > table > tbody > tr > td { padding-top:3px; padding-left:5px;padding-right:5px;padding-bottom:3px; vertical-align:top; }
+div.rcan > div > table > tbody > tr > td > table { margin-bottom:-3px;}
+div.rcan-hidden-subtree { padding:0px;margin:0px;padding:0px;margin-bottom:2px; }
+
+div.user-goal-test { border-left:18px solid #aa0; padding-left:12px;margin-bottom:20px;}
+div.user-goal-test > p { color:#aa0; font-weight: bold; }
+
+div.pole-connector { height:32px;width:55px; }
+div.pole-connector > div.domain { position:absolute;top:-4px;padding-left:4px; padding-right:4px;}
+div.pole-connector > svg { position:absolute;top:11px; }
+div.pole-connector > div.save-button { position:absolute;left:15px;top:20px;color:#006;display:none; }
+div.pole-connector > span a { position:absolute;top:11px;left:10px;height:10px;width:35px; }
+div.pole-connector > span a:hover { border-bottom:1px solid #006; }
+</style></head><body><div style="border:1px solid
+   #444;padding-left:10px;padding-right:10px;font:11pt Helvetica Neue,
+   Helvetica, sans-serif; margin-bottom:50px; background-color:#eee;"><h1>Interactive Visualizations II</h1>
+      <p>Below is shown the default debug output generated by our
+       framework for compositional semantics when constructing a
+       semantic description for a specific topic (a red block) in a
+       context. The resulting meaning could be verbalized in English
+       as &quot;the red block&quot;.</p><p>Clicking on almost any non-black element will reveal a detailed
+       version of it and clicking it twice either expands an even more
+       detailed representation or collapses it again.</p></div><p><b>context: </b><div class="entity"><span id="context-2-923" name="entity-8267"><div class="entity-box"><div class="entity-title"><a href="javascript:collapse('context-2-923');" title="collapse entity" name="CONTEXT-2">context-2</a></div><table class="entity" cellpadding="0" cellspacing="0"><tr><td class="entity-details"><div style="text-align:center"><div class="spatial-scene" style="width:295.44px;height:313.10px;"><svg xmlns="http://www.w3.org/2000/svg" width="295.44" height="313.10"><g transform="rotate(-90) scale(0.10,-0.10) translate(-2831.00,-1841.67)"><g stroke="#666666" stroke-width="10" stroke-dasharray="20,20"><line x1="0" y1="0" x2="300" y2="0"></line><line x1="0" y1="0" x2="0" y2="300"></line></g><g stroke="black" stroke-width="20" stroke-linecap="round" transform="translate(0.0,0.0) rotate(0.0)"><line x1="0" y1="0" x2="-200" y2="0"></line><line x1="0" y1="0" x2="-50" y2="30"></line><line x1="0" y1="0" x2="-50" y2="-30"></line></g><g stroke="black" stroke-width="20" stroke-linecap="round" transform="translate(1461.7,-351.2) rotate(144.8)"><line x1="0" y1="0" x2="-200" y2="0"></line><line x1="0" y1="0" x2="-50" y2="30"></line><line x1="0" y1="0" x2="-50" y2="-30"></line></g><g stroke="blue" stroke-width="20" transform="translate(513.0,891.7) rotate(-50.4)"><rect x="-160.00" y="-155.00" width="320.00" height="310.00" fill="none"></rect><line x1="0" y1="0" x2="155.00">Y20</line></g><g transform="translate(1454.7,248.7) rotate(9.7)"><rect x="-29.88" y="-29.88" width="59.75" height="59.75" fill="#A38022"></rect></g><g transform="translate(285.0,549.0) rotate(62.6)"><rect x="-43.56" y="-43.56" width="87.13" height="87.13" fill="#9B7B08"></rect></g><g transform="translate(527.1,-742.6) rotate(-54.6)"><rect x="-49.60" y="-49.60" width="99.19" height="99.19" fill="#930E2D"></rect></g><g><g stroke="green" stroke-width="20" stroke-linecap="round" stroke-opacity=".5" transform="rotate(17.6)"><line x1="300" y1="0" x2="650" y2="0"></line><line x1="650" y1="0" x2="600" y2="50"></line><line x1="650" y1="0" x2="600" y2="-50"></line><line x1="600" y1="0" x2="550" y2="50"></line><line x1="600" y1="0" x2="550" y2="-50"></line></g><g stroke="blue" stroke-width="20" transform="translate(1881.0,891.7)rotate(17.6)"><line x1="0" y1="-650.00" x2="0" y2="650.00"></line></g></g></g></svg><div class="entity-label" style="right:111.28px;top:283.10px"><div class="pprint" style=""><span class="table"><span id="S-43390" style="white-space:nowrap;" onclick="highlightSymbol('ROBOT-1','S-43390','#CCCCFF');"><a name="ROBOT-1"></a>robot-1</span></span></div></div><div class="entity-label" style="right:76.15px;top:136.94px"><div class="pprint" style=""><span class="table"><span id="S-43391" style="white-space:nowrap;" onclick="highlightSymbol('ROBOT-2','S-43391','#CCCCFF');"><a name="ROBOT-2"></a>robot-2</span></span></div></div><div class="entity-label" style="left:95.00px;top:231.80px"><div class="pprint" style=""><span class="table"><span id="S-43392" style="white-space:nowrap;" onclick="highlightSymbol('BOX-1','S-43392','#FFCCCC');"><a name="BOX-1"></a>box-1</span></span></div></div><div class="entity-label" style="right:136.15px;top:137.63px"><div class="pprint" style=""><span class="table"><span id="S-43393" style="white-space:nowrap;" onclick="highlightSymbol('OBJ-265','S-43393','#FFCCCC');"><a name="OBJ-265"></a>obj-265</span></span></div></div><div class="entity-label" style="left:129.27px;top:254.60px"><div class="pprint" style=""><span class="table"><span id="S-43394" style="white-space:nowrap;" onclick="highlightSymbol('OBJ-266','S-43394','#CCFFCC');"><a name="OBJ-266"></a>obj-266</span></span></div></div><div class="entity-label" style="right:37.01px;top:230.39px"><div class="pprint" style=""><span class="table"><span id="S-43395" style="white-space:nowrap;" onclick="highlightSymbol('OBJ-268','S-43395','#FFCC99');"><a name="OBJ-268"></a>obj-268</span></span></div></div></div><div class="entity-detail"><div class="entity"><span id="robot-1-1001" name="entity-8268"><div class="entity-box"><div class="entity-title"><a href="javascript:expand('robot-1-1001');" title="expand entity" name="ROBOT-1">robot-1</a></div></div></span><table class="entity"><tr><td class="entity-type">robot</td></tr></table></div><div class="entity"><span id="robot-2-1002" name="entity-8269"><div class="entity-box"><div class="entity-title"><a href="javascript:expand('robot-2-1002');" title="expand entity" name="ROBOT-2">robot-2</a></div></div></span><table class="entity"><tr><td class="entity-type">robot</td></tr></table></div><div class="entity"><span id="box-1-999" name="entity-8270"><div class="entity-box"><div class="entity-title"><a href="javascript:expand('box-1-999');" title="expand entity" name="BOX-1">box-1</a></div></div></span><table class="entity"><tr><td class="entity-type">box</td></tr></table></div><div class="entity"><span id="obj-265-1423" name="entity-8271"><div class="entity-box"><div class="entity-title"><a href="javascript:expand('obj-265-1423');" title="expand entity" name="OBJ-265">obj-265</a></div></div></span><table class="entity"><tr><td class="entity-type">block</td></tr></table></div><div class="entity"><span id="obj-266-1412" name="entity-8272"><div class="entity-box"><div class="entity-title"><a href="javascript:expand('obj-266-1412');" title="expand entity" name="OBJ-266">obj-266</a></div></div></span><table class="entity"><tr><td class="entity-type">block</td></tr></table></div><div class="entity"><span id="obj-268-2564" name="entity-8273"><div class="entity-box"><div class="entity-title"><a href="javascript:expand('obj-268-2564');" title="expand entity" name="OBJ-268">obj-268</a></div></div></span><table class="entity"><tr><td class="entity-type">block</td></tr></table></div><div class="entity"><span id="box-3-867" name="entity-8274"><div class="entity-box"><div class="entity-title"><a href="javascript:expand('box-3-867');" title="expand entity" name="BOX-3">box-3</a></div></div></span><table class="entity"><tr><td class="entity-type">global-reference</td></tr></table></div></div></div></td></tr></table></div></span><table class="entity"><tr><td class="entity-type">sensory-context</td></tr></table></div></p><p><b>topic: </b><div class="entity"><span id="obj-268-2565" name="entity-8275"><div class="entity-box"><div class="entity-title"><a href="javascript:collapse('obj-268-2565');" title="collapse entity" name="OBJ-268">obj-268</a></div><table class="entity" cellpadding="0" cellspacing="0"><tr><td class="entity-details"><div style="text-align:center"><div class="spatial-scene" style="width:131.28px;height:109.72px;"><svg xmlns="http://www.w3.org/2000/svg" width="131.28" height="109.72"><g transform="rotate(-90) scale(0.10,-0.10) translate(-897.25,-200.00)"><g stroke="#666666" stroke-width="10" stroke-dasharray="20,20"><line x1="0" y1="0" x2="300" y2="0"></line><line x1="0" y1="0" x2="0" y2="300"></line></g><g transform="translate(527.1,-742.6) rotate(-54.6)"><rect x="-49.60" y="-49.60" width="99.19" height="99.19" fill="#930E2D"></rect></g></g></svg><div class="entity-label" style="right:37.01px;top:37.01px"><div class="pprint" style=""><span class="table"><span id="S-43402" style="white-space:nowrap;" onclick="highlightSymbol('OBJ-268','S-43402','#FFCC99');"><a name="OBJ-268"></a>obj-268</span></span></div></div></div></div><div class="entity-detail">x = 527.11</div><div class="entity-detail">y = -742.63</div><div class="entity-detail">color-y = 58.0</div><div class="entity-detail">color-u = 192.0</div><div class="entity-detail">color-v = 121.0</div><div class="entity-detail">width = 99.19</div><div class="entity-detail">length = 99.19</div><div class="entity-detail">height = 224.57</div></td></tr></table></div></span><table class="entity"><tr><td class="entity-type">block</td></tr></table></div></p><hr></hr><h2>Computing next composer solution</h2><p><table class="two-col"><tbody><tr><td>chunks</td><td><span id="chunk-17955" name="chunk-17954"><div class="chnk"><div class="chnk-title"><a href="javascript:expand('chunk-17955');" title="expand">select-entity (0.50)</a></div></div></span><span id="chunk-17958" name="chunk-17957"><div class="chnk"><div class="chnk-title"><a href="javascript:expand('chunk-17958');" title="expand">filter-by-color (0.50)</a></div></div></span><span id="chunk-17961" name="chunk-17960"><div class="chnk"><div class="chnk-title"><a href="javascript:expand('chunk-17961');" title="expand">filter-set-class (0.50)</a></div></div></span><span id="chunk-17964" name="chunk-17963"><div class="chnk"><div class="chnk-title"><a href="javascript:expand('chunk-17964');" title="expand">get-context (0.50)</a></div></div></span></td></tr><tr><td><span id="id-4398" name="tree-91"><a href="javascript:expandAll('tree-91');" title="expand all">composition-tree</a></span></td><td><div style="clear:both;"><div style=""><table class="tree"><tbody><tr><td><span id="ccn-16248" name="tree-91"><div class="ccn" style="border:1px solid #8a8"><div class="ccn-title" style="background-color:#8a8;"><a href="javascript:expand('ccn-16248');" title="expand">0&#160;initial</a></div></div></span></td></tr></tbody></table></div></div></td></tr><tr><td>queue</td><td><div class="ccn-float"><span id="ccn-16251" name="ccn-16250"><div class="ccn" style="border:1px solid #8a8"><div class="ccn-title" style="background-color:#8a8;"><a href="javascript:expand('ccn-16251');" title="expand">0&#160;initial</a></div></div></span></div></td></tr></tbody></table></p><hr></hr><h3>Result</h3><table class="two-col"><tbody><tr><td><span id="id-4399" name="tree-92"><a href="javascript:expandAll('tree-92');" title="expand all">composition tree</a></span></td><td><div style="clear:both;"><div style=""><table class="tree"><tbody><tr><td><span id="ccn-16253" name="tree-92"><div class="ccn" style="border:1px solid #8a8"><div class="ccn-title" style="background-color:#8a8;"><a href="javascript:expand('ccn-16253');" title="expand">0&#160;initial</a></div></div></span></td><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div class="child" style=""><table class="tree"><tbody><tr><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div style="clear:both;"><div style=""><table class="tree"><tbody><tr><td><span id="ccn-16255" name="tree-92"><div class="ccn" style="border:1px solid #268"><div class="ccn-title" style="background-color:#268;"><a href="javascript:expand('ccn-16255');" title="expand">1&#160;select-entity</a></div></div></span></td><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div class="child" style=""><table class="tree"><tbody><tr><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div style="clear:both;"><div style=""><table class="tree"><tbody><tr><td><span id="ccn-16257" name="tree-92"><div class="ccn" style="border:1px solid #268"><div class="ccn-title" style="background-color:#268;"><a href="javascript:expand('ccn-16257');" title="expand">2&#160;filter-by-color, select-entity</a></div></div></span></td><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div class="child" style=""><table class="tree"><tbody><tr><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div style="clear:both;"><div style=""><table class="tree"><tbody><tr><td><span id="ccn-16259" name="tree-92"><div class="ccn" style="border:1px solid #744"><div class="ccn-title" style="background-color:#744;"><a href="javascript:expand('ccn-16259');" title="expand">5&#160;2&#160;*&#160;filter-by-color, select-entity</a></div></div></span></td></tr></tbody></table></div></div></td></tr></tbody></table><div class="vl-top vl-left" style="border-left:1px #888 solid"></div></div><div class="child" style=""><table class="tree"><tbody><tr><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div style="clear:both;"><div style=""><table class="tree"><tbody><tr><td><span id="ccn-16261" name="tree-92"><div class="ccn" style="border:1px solid #268"><div class="ccn-title" style="background-color:#268;"><a href="javascript:expand('ccn-16261');" title="expand">6&#160;filter-by-color, filter-set-class, select-entity</a></div></div></span></td><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div class="child" style=""><table class="tree"><tbody><tr><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div style="clear:both;"><div style=""><table class="tree"><tbody><tr><td><span id="ccn-16263" name="tree-92"><div class="ccn" style="border:1px solid #744"><div class="ccn-title" style="background-color:#744;"><a href="javascript:expand('ccn-16263');" title="expand">8&#160;2&#160;*&#160;filter-by-color, filter-set-class, select-entity</a></div></div></span></td></tr></tbody></table></div></div></td></tr></tbody></table><div class="vl-top vl-left" style="border-left:1px #888 solid"></div></div><div class="child" style=""><table class="tree"><tbody><tr><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div style="clear:both;"><div style=""><table class="tree"><tbody><tr><td><span id="ccn-16265" name="tree-92"><div class="ccn" style="border:1px solid #744"><div class="ccn-title" style="background-color:#744;"><a href="javascript:expand('ccn-16265');" title="expand">9&#160;filter-by-color, 2&#160;*&#160;filter-set-class, select-entity</a></div></div></span></td></tr></tbody></table></div></div></td></tr></tbody></table><div class="vl-middle vl-left" style="border-left:1px #888 solid"></div></div><div class="child" style=""><table class="tree"><tbody><tr><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div style="clear:both;"><div style=""><table class="tree"><tbody><tr><td><span id="ccn-16267" name="tree-92"><div class="ccn" style="border:1px solid #273"><div class="ccn-title" style="background-color:#273;"><a href="javascript:expand('ccn-16267');" title="expand">10&#160;filter-by-color, filter-set-class, get-context, select-entity</a></div></div></span></td></tr></tbody></table></div></div></td></tr></tbody></table><div class="vl-bottom vl-left" style="border-left:1px #888 solid"></div></div></td></tr></tbody></table></div></div></td></tr></tbody></table><div class="vl-middle vl-left" style="border-left:1px #888 solid"></div></div><div class="child" style=""><table class="tree"><tbody><tr><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div style="clear:both;"><div style=""><table class="tree"><tbody><tr><td><span id="ccn-16272" name="tree-92"><div class="ccn" style="border:1px solid #845"><div class="ccn-title" style="background-color:#845;"><a href="javascript:expand('ccn-16272');" title="expand">7&#160;filter-by-color, get-context, select-entity</a></div></div></span></td></tr></tbody></table></div></div></td></tr></tbody></table><div class="vl-bottom vl-left" style="border-left:1px #888 solid"></div></div></td></tr></tbody></table></div></div></td></tr></tbody></table><div class="vl-top vl-left" style="border-left:1px #888 solid"></div></div><div class="child" style=""><table class="tree"><tbody><tr><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div style="clear:both;"><div style=""><table class="tree"><tbody><tr><td><span id="ccn-16277" name="tree-92"><div class="ccn" style="border:1px solid #268"><div class="ccn-title" style="background-color:#268;"><a href="javascript:expand('ccn-16277');" title="expand">3&#160;filter-set-class, select-entity</a></div></div></span></td></tr></tbody></table></div></div></td></tr></tbody></table><div class="vl-middle vl-left" style="border-left:1px #888 solid"></div></div><div class="child" style=""><table class="tree"><tbody><tr><td><div style="border-top:1px solid #888;width:10px"></div></td><td><div style="clear:both;"><div style=""><table class="tree"><tbody><tr><td><span id="ccn-16279" name="tree-92"><div class="ccn" style="border:1px solid #268"><div class="ccn-title" style="background-color:#268;"><a href="javascript:expand('ccn-16279');" title="expand">4&#160;get-context, select-entity</a></div></div></span></td></tr></tbody></table></div></div></td></tr></tbody></table><div class="vl-bottom vl-left" style="border-left:1px #888 solid"></div></div></td></tr></tbody></table></div></div></td></tr></tbody></table></div></td></tr></tbody></table></div></div></td></tr><tr><td>queue</td><td><div class="ccn-float"><span id="ccn-16282" name="ccn-16281"><div class="ccn" style="border:1px solid #273"><div class="ccn-title" style="background-color:#273;"><a href="javascript:expand('ccn-16282');" title="expand">10&#160;filter-by-color, filter-set-class, get-context, select-entity</a></div></div></span></div><div class="ccn-float"><span id="ccn-16288" name="ccn-16287"><div class="ccn" style="border:1px solid #268"><div class="ccn-title" style="background-color:#268;"><a href="javascript:expand('ccn-16288');" title="expand">3&#160;filter-set-class, select-entity</a></div></div></span></div></td></tr><tr><td><span id="id-4826" name="results-98"><a href="javascript:expandAll('results-98');" title="expand all">Found 1 solutions</a></span></td><td><span id="cer-129" name="results-98"><div class="cer"><div class="cer-title"><a href="javascript:expand('cer-129');" title="expand">block,&#160;red,&#160;unique (0.87)</a></div></div></span></td></tr></tbody></table><hr></hr><h3>Meaning </h3><div class="pprint" style="max-width:489.59998px;"><span class="table"><span><span class="table"><span>(</span></span></span><span><span class="table"><span><span class="table"><span>(</span></span></span><span><span class="table"><span id="S-50127" style="white-space:nowrap;" onclick="highlightSymbol('SELECT-ENTITY','S-50127','#99CCCC');"><a name="SELECT-ENTITY"></a>select-entity</span></span> <span class="table"><span id="S-50128" style="white-space:nowrap;" onclick="highlightSymbol('?TOPIC','S-50128','#CCCCCC');"><a name="?TOPIC"></a>?topic</span></span> <span class="table"><span id="S-50129" style="white-space:nowrap;" onclick="highlightSymbol('?SOURCE-SET','S-50129','#66FF99');"><a name="?SOURCE-SET"></a>?source-set</span></span> <span class="table"><span id="S-50130" style="white-space:nowrap;" onclick="highlightSymbol('?SELECTOR','S-50130','#99FF99');"><a name="?SELECTOR"></a>?selector<span style="background-color:white;">)</span></span></span></span></span> <span class="table"><span><span class="table"><span>(</span></span></span><span><span class="table"><span id="S-50131" style="white-space:nowrap;" onclick="highlightSymbol('FILTER-BY-COLOR','S-50131','#FFFFCC');"><a name="FILTER-BY-COLOR"></a>filter-by-color</span></span> <span class="table"><span id="S-50132" style="white-space:nowrap;" onclick="highlightSymbol('?SOURCE-SET','S-50132','#66FF99');"><a name="?SOURCE-SET"></a>?source-set</span></span> <span class="table"><span id="S-50133" style="white-space:nowrap;" onclick="highlightSymbol('?SOURCE-SET-11525','S-50133','#FFFF99');"><a name="?SOURCE-SET-11525"></a>?source-set-11525</span></span> <span class="table"><span id="S-50134" style="white-space:nowrap;" onclick="highlightSymbol('?COLOR','S-50134','#CCFFCC');"><a name="?COLOR"></a>?color<span style="background-color:white;">)</span></span></span></span></span> <span class="table"><span><span class="table"><span>(</span></span></span><span><span class="table"><span id="S-50135" style="white-space:nowrap;" onclick="highlightSymbol('FILTER-SET-CLASS','S-50135','#FFCCCC');"><a name="FILTER-SET-CLASS"></a>filter-set-class</span></span> <span class="table"><span id="S-50136" style="white-space:nowrap;" onclick="highlightSymbol('?SOURCE-SET-11525','S-50136','#FFFF99');"><a name="?SOURCE-SET-11525"></a>?source-set-11525</span></span> <span class="table"><span id="S-50137" style="white-space:nowrap;" onclick="highlightSymbol('?SOURCE-SET-11529','S-50137','#CCFF99');"><a name="?SOURCE-SET-11529"></a>?source-set-11529</span></span> <span class="table"><span id="S-50138" style="white-space:nowrap;" onclick="highlightSymbol('?CLASS','S-50138','#FFCC66');"><a name="?CLASS"></a>?class<span style="background-color:white;">)</span></span></span></span></span> <span class="table"><span><span class="table"><span>(</span></span></span><span><span class="table"><span id="S-50139" style="white-space:nowrap;" onclick="highlightSymbol('GET-CONTEXT','S-50139','#FFCC66');"><a name="GET-CONTEXT"></a>get-context</span></span> <span class="table"><span id="S-50140" style="white-space:nowrap;" onclick="highlightSymbol('?SOURCE-SET-11529','S-50140','#CCFF99');"><a name="?SOURCE-SET-11529"></a>?source-set-11529<span style="background-color:white;">)</span></span></span></span></span> <span class="table"><span><span class="table"><span>(</span></span></span><span><span class="table"><span id="S-50141" style="white-space:nowrap;" onclick="highlightSymbol('BIND','S-50141','#FFCCCC');"><a name="BIND"></a>bind</span></span> <span class="table"><span id="S-50142" style="white-space:nowrap;" onclick="highlightSymbol('OBJECT-CLASS','S-50142','#CCFFCC');"><a name="OBJECT-CLASS"></a>object-class</span></span> <span class="table"><span id="S-50143" style="white-space:nowrap;" onclick="highlightSymbol('?CLASS','S-50143','#FFCC66');"><a name="?CLASS"></a>?class</span></span> <span class="table"><span id="S-50144" style="white-space:nowrap;" onclick="highlightSymbol('BLOCK','S-50144','#99FFFF');"><a name="BLOCK"></a>block<span style="background-color:white;">)</span></span></span></span></span> <span class="table"><span><span class="table"><span>(</span></span></span><span><span class="table"><span id="S-50145" style="white-space:nowrap;" onclick="highlightSymbol('BIND','S-50145','#FFCCCC');"><a name="BIND"></a>bind</span></span> <span class="table"><span id="S-50146" style="white-space:nowrap;" onclick="highlightSymbol('COLOR-CATEGORY','S-50146','#99CCCC');"><a name="COLOR-CATEGORY"></a>color-category</span></span> <span class="table"><span id="S-50147" style="white-space:nowrap;" onclick="highlightSymbol('?COLOR','S-50147','#CCFFCC');"><a name="?COLOR"></a>?color</span></span> <span class="table"><span id="S-50148" style="white-space:nowrap;" onclick="highlightSymbol('RED','S-50148','#FFCCCC');"><a name="RED"></a>red<span style="background-color:white;">)</span></span></span></span></span> <span class="table"><span><span class="table"><span>(</span></span></span><span><span class="table"><span id="S-50149" style="white-space:nowrap;" onclick="highlightSymbol('BIND','S-50149','#FFCCCC');"><a name="BIND"></a>bind</span></span> <span class="table"><span id="S-50150" style="white-space:nowrap;" onclick="highlightSymbol('SELECTOR','S-50150','#99FFFF');"><a name="SELECTOR"></a>selector</span></span> <span class="table"><span id="S-50151" style="white-space:nowrap;" onclick="highlightSymbol('?SELECTOR','S-50151','#99FF99');"><a name="?SELECTOR"></a>?selector</span></span> <span class="table"><span id="S-50152" style="white-space:nowrap;" onclick="highlightSymbol('UNIQUE','S-50152','#FF99FF');"><a name="UNIQUE"></a>unique<span style="background-color:white;">))</span></span></span></span></span></span></span></div><div class="predicate-network-svg"><svg width="553pt" height="154pt" viewBox="0.00 0.00 553.00 154.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="graph1" class="graph" transform="scale(1 1) rotate(0) translate(4 150)"><title>g</title><polygon fill="white" stroke="white" points="-4,5 -4,-150 550,-150 550,5 -4,5"/><g id="node2" class="node"><title>struct0</title><polygon fill="none" stroke="#ffffff" points="162.703,-127.113 162.703,-144.887 379.297,-144.887 379.297,-127.113 162.703,-127.113"/><text text-anchor="middle" x="194.794" y="-132.387" font-family="Arial" font-size="8.50">(select&#45;entity</text><polyline fill="none" stroke="#ffffff" points="226.885,-127.113 226.885,-144.887 "/><text text-anchor="middle" x="246.226" y="-132.387" font-family="Arial" font-size="8.50">?topic</text><polyline fill="none" stroke="#ffffff" points="265.567,-127.113 265.567,-144.887 "/><text text-anchor="middle" x="295.772" y="-132.387" font-family="Arial" font-size="8.50">?source&#45;set</text><polyline fill="none" stroke="#ffffff" points="325.976,-127.113 325.976,-144.887 "/><text text-anchor="middle" x="352.636" y="-132.387" font-family="Arial" font-size="8.50">?selector)</text></g><g id="node4" class="node"><title>struct1</title><polygon fill="none" stroke="#ffffff" points="76.7068,-85.1129 76.7068,-102.887 333.293,-102.887 333.293,-85.1129 76.7068,-85.1129"/><text text-anchor="middle" x="110.682" y="-90.3871" font-family="Arial" font-size="8.50">(filter&#45;by&#45;color</text><polyline fill="none" stroke="#ffffff" points="144.657,-85.1129 144.657,-102.887 "/><text text-anchor="middle" x="174.862" y="-90.3871" font-family="Arial" font-size="8.50">?source&#45;set</text><polyline fill="none" stroke="#ffffff" points="205.066,-85.1129 205.066,-102.887 "/><text text-anchor="middle" x="248.189" y="-90.3871" font-family="Arial" font-size="8.50">?source&#45;set&#45;11525</text><polyline fill="none" stroke="#ffffff" points="291.312,-85.1129 291.312,-102.887 "/><text text-anchor="middle" x="312.302" y="-90.3871" font-family="Arial" font-size="8.50">?color)</text></g><g id="edge9" class="edge"><title>struct0:varSOURCEdashSET1&#45;&gt;struct1:varSOURCEdashSET2</title><path fill="none" stroke="black" d="M296,-127C296,-72.1746 175,-157.825 175,-103"/></g><g id="node14" class="node"><title>struct6</title><polygon fill="none" stroke="#ffffff" points="369.246,-85.1129 369.246,-102.887 544.754,-102.887 544.754,-85.1129 369.246,-85.1129"/><text text-anchor="middle" x="386.696" y="-90.3871" font-family="Arial" font-size="8.50">(bind</text><polyline fill="none" stroke="#ffffff" points="404.147,-85.1129 404.147,-102.887 "/><text text-anchor="middle" x="427.028" y="-90.3871" font-family="Arial" font-size="8.50">selector</text><polyline fill="none" stroke="#ffffff" points="449.909,-85.1129 449.909,-102.887 "/><text text-anchor="middle" x="475.154" y="-90.3871" font-family="Arial" font-size="8.50">?selector</text><polyline fill="none" stroke="#ffffff" points="500.399,-85.1129 500.399,-102.887 "/><text text-anchor="middle" x="522.577" y="-90.3871" font-family="Arial" font-size="8.50">unique)</text></g><g id="edge13" class="edge"><title>struct0:varSELECTOR1&#45;&gt;struct6:varSELECTOR7</title><path fill="none" stroke="black" d="M380,-136C402.349,-136 475,-125.349 475,-103"/></g><g id="node6" class="node"><title>struct2</title><polygon fill="none" stroke="#ffffff" points="-0.334229,-43.1129 -0.334229,-60.8871 286.334,-60.8871 286.334,-43.1129 -0.334229,-43.1129"/><text text-anchor="middle" x="35.2928" y="-48.3871" font-family="Arial" font-size="8.50">(filter&#45;set&#45;class</text><polyline fill="none" stroke="#ffffff" points="70.9199,-43.1129 70.9199,-60.8871 "/><text text-anchor="middle" x="114.043" y="-48.3871" font-family="Arial" font-size="8.50">?source&#45;set&#45;11525</text><polyline fill="none" stroke="#ffffff" points="157.165,-43.1129 157.165,-60.8871 "/><text text-anchor="middle" x="200.288" y="-48.3871" font-family="Arial" font-size="8.50">?source&#45;set&#45;11529</text><polyline fill="none" stroke="#ffffff" points="243.411,-43.1129 243.411,-60.8871 "/><text text-anchor="middle" x="264.872" y="-48.3871" font-family="Arial" font-size="8.50">?class)</text></g><g id="edge17" class="edge"><title>struct1:varSOURCEdashSETdash115252&#45;&gt;struct2:varSOURCEdashSETdash115253</title><path fill="none" stroke="black" d="M248,-85C248,-24.4968 114,-121.503 114,-61"/></g><g id="node12" class="node"><title>struct5</title><polygon fill="none" stroke="#ffffff" points="321.489,-43.1129 321.489,-60.8871 496.511,-60.8871 496.511,-43.1129 321.489,-43.1129"/><text text-anchor="middle" x="338.939" y="-48.3871" font-family="Arial" font-size="8.50">(bind</text><polyline fill="none" stroke="#ffffff" points="356.389,-43.1129 356.389,-60.8871 "/><text text-anchor="middle" x="391.317" y="-48.3871" font-family="Arial" font-size="8.50">color&#45;category</text><polyline fill="none" stroke="#ffffff" points="426.245,-43.1129 426.245,-60.8871 "/><text text-anchor="middle" x="445.82" y="-48.3871" font-family="Arial" font-size="8.50">?color</text><polyline fill="none" stroke="#ffffff" points="465.396,-43.1129 465.396,-60.8871 "/><text text-anchor="middle" x="480.954" y="-48.3871" font-family="Arial" font-size="8.50">red)</text></g><g id="edge21" class="edge"><title>struct1:varCOLOR2&#45;&gt;struct5:varCOLOR6</title><path fill="none" stroke="black" d="M334,-94C342.766,-94 342.875,-87.2891 351,-84 391.268,-67.6999 446,-104.442 446,-61"/></g><g id="node8" class="node"><title>struct3</title><polygon fill="none" stroke="#ffffff" points="29.0209,-1.11292 29.0209,-18.8871 178.979,-18.8871 178.979,-1.11292 29.0209,-1.11292"/><text text-anchor="middle" x="59.462" y="-6.38708" font-family="Arial" font-size="8.50">(get&#45;context</text><polyline fill="none" stroke="#ffffff" points="89.9032,-1.11292 89.9032,-18.8871 "/><text text-anchor="middle" x="134.441" y="-6.38708" font-family="Arial" font-size="8.50">?source&#45;set&#45;11529)</text></g><g id="edge25" class="edge"><title>struct2:varSOURCEdashSETdash115293&#45;&gt;struct3:varSOURCEdashSETdash115294</title><path fill="none" stroke="black" d="M200,-43C200,-11.7875 134,-50.2125 134,-19"/></g><g id="node10" class="node"><title>struct4</title><polygon fill="none" stroke="#ffffff" points="214.727,-1.11292 214.727,-18.8871 389.273,-18.8871 389.273,-1.11292 214.727,-1.11292"/><text text-anchor="middle" x="232.178" y="-6.38708" font-family="Arial" font-size="8.50">(bind</text><polyline fill="none" stroke="#ffffff" points="249.628,-1.11292 249.628,-18.8871 "/><text text-anchor="middle" x="280.067" y="-6.38708" font-family="Arial" font-size="8.50">object&#45;class</text><polyline fill="none" stroke="#ffffff" points="310.506,-1.11292 310.506,-18.8871 "/><text text-anchor="middle" x="330.553" y="-6.38708" font-family="Arial" font-size="8.50">?class</text><polyline fill="none" stroke="#ffffff" points="350.599,-1.11292 350.599,-18.8871 "/><text text-anchor="middle" x="369.936" y="-6.38708" font-family="Arial" font-size="8.50">block)</text></g><g id="edge29" class="edge"><title>struct2:varCLASS3&#45;&gt;struct4:varCLASS5</title><path fill="none" stroke="black" d="M287,-52C290.056,-52 331,-22.0556 331,-19"/></g></g></svg></div></body></html>
